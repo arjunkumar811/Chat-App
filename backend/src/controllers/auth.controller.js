@@ -68,11 +68,58 @@ export const signup = async (req, res) => {
 
 }
 
-export const login = (req, res) => {
-    res.send('login route')
+export const login = async (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    try {
+        const user = await User.findOne({email});
+
+        if(!user){
+            return res.status(400).json({
+                message: "Invaild credentials"
+            })  
+        }
+
+ const isPasswordMatch = await bcrypt.compare(password, user.password);
+
+ if(!isPasswordMatch){
+    return res.status(400).json({
+        message: "Invaild credentials"
+    })
+ }
+
+ genaratetoken(user._id, res);
+
+ res.status(200).json({
+    _id: user._id,
+    fullName: user.fullName,
+    profilePic: user.profilePic,
+    message: "User logged IN successfully"
+  })
+
+
+    } catch (error) {
+        console.log("login error " , error.message);
+        res.json(500).json({
+            message: "Internal server error"
+        })
+    }
 }
 
 
 export const logout = (req, res) => {
-    res.send('logout route')
+    try {
+        res.cookie('jwt', "", {
+            maxAge: 0
+        })
+        res.status(200).json({
+            message: "User logged Out successfully"
+        })
+    } catch (error) {
+        console.log("logout error " , error.message);
+        res.json(500).json({
+            message: "Internal server error"
+        })  
+    }
 }
