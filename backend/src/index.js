@@ -10,7 +10,6 @@ import authRouter from './routes/auth.route.js'
 import { connectDB } from './lib/db.js';
 
 
-
 app.use("/api/auth", authRouter);
 app.use('/api/message', messageRouter)
 
