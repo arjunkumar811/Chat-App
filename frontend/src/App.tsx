@@ -16,7 +16,7 @@ function App() {
     checkAuth()
   }, [checkAuth])
 
-  if(isCheckingAuth && !authUser) return <div>Loading...</div>
+  if(isCheckingAuth && !authUser) return <div>Loading.......</div>
 
   return (
     <>
